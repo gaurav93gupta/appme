@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/style1.css">
+<title>Bhartiyai Nyay Samhita</title>
+</head>
+<body>
+<div class="container">
+  <div class="header">Bhartiyai Nyay Samhita</div>
+  <div class="search-container">
+    <input type="text" id="search-box" placeholder="Search KEYWORD">
+    <button id="fetch-details">Fetch Details</button>
+  </div>
+  <ul id="search-results"></ul>
+  <div id="details"></div>
+</div>
+<script>
+
+    
+document.addEventListener("DOMContentLoaded", function() {
+    const searchBox = document.getElementById('search-box');
+    const searchResults = document.getElementById('search-results');
+    const fetchButton = document.getElementById('fetch-details');
+    const detailsDiv = document.getElementById('details');
+  
+    // Dummy JSON data with additional details
+    const jsonData = [
+        {
+            "name": "1.          Short title, commencement and application.",
+            "details": "1.          Short title, commencement and application.: 1. (1) This Act may be called the Bharatiya Nyaya Sanhita, 2023. (2) It shall come into force on such date as the Central Government may, by notification in the Official Gazette, appoint, and different dates may be appointed for different provisions of this Sanhita. Short title, commencement and application. (3) Every person shall be liable to punishment under this Sanhita and not otherwise for every act or omission contrary to the provisions thereof, of which he shall be guilty within India. (4) Any person liable, by any law for the time being in force in India, to be tried for an offence committed beyond India shall be dealt with according to the provisions of this Sanhita for any act committed beyond India in the same manner as if such act had been committed within India. (5) The provisions of this Sanhita shall also apply to any offence committed by— (a) any citizen of India in any place without and beyond India; (b) any person on any ship or aircraft registered in India wherever it may be; (c) any person in any place without and beyond India committing offence targeting a computer resource located in India. Explanation.—In this section, the word “offence” includes every act committed outside India which, if committed in India, would be punishable under this Sanhita. Illustration. A, who is a citizen of India, commits a murder in any place without and beyond India. He can be tried and convicted of murder in any place in India in which he may be found. (6) Nothing in this Sanhita shall affect the provisions of any Act for punishing mutiny and desertion of officers, soldiers, sailors or airmen in the service of the Government of India or the provisions of any special or local law."
+        },
+        
+        {
+            "name": "357.        Breach of contract to attend on and supply wants of helpless person.",
+            "details": "357.        Breach of contract to attend on and supply wants of helpless person.:  357. Whoever, being bound by a lawful contract to attend on or to supply the wants of any person who, by reason of youth, or of unsoundness of mind, or of a disease or bodily weakness, is helpless or incapable of providing for his own safety or of supplying his own wants, voluntarily omits so to do, shall be punished with imprisonment of either description for a term which may extend to three months, or with fine which may extend to five thousand rupees, or with both."
+        },
+        {
+            "name": "358.        Repeal and savings.",
+            "details": "358.        Repeal and savings.:  358. (1) The Indian Penal Code is hereby repealed. (2) Notwithstanding the repeal of the Code referred to in sub-section (1), it shall not affect,— (a) the previous operation of the Code so repealed or anything duly done or suffered thereunder; or (b) any right, privilege, obligation or liability acquired, accrued or incurred under the Code so repealed; or (c) any penalty, or punishment incurred in respect of any offences committed against the Code so repealed; or (d) any investigation or remedy in respect of any such penalty, or punishment; or (e) any proceeding, investigation or remedy in respect of any such penalty or punishment as aforesaid, and any such proceeding or remedy may be instituted, continued or enforced, and any such penalty may be imposed as if that Code had not been repealed. (3) Notwithstanding such repeal, anything done or any action taken under the said Code shall be deemed to have been done or taken under the corresponding provisions of this Sanhita. (4) The mention of particular matters in sub-section (2) shall not be held to prejudice or affect the general application of section 6 of the General Clauses Act,1897 with regard to the effect of the repeal."
+        }
+    ]  ;
+  
+    // Function to filter JSON data based on user input
+    function filterData(query) {
+      return jsonData.filter(item =>
+        item.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+  
+    // Function to display filtered results
+    function displayResults(results, query) {
+      searchResults.innerHTML = '';
+      results.forEach(result => {
+        const li = document.createElement('li');
+        const nameParts = result.name.split(new RegExp(`(${query})`, 'i'));
+        li.innerHTML = nameParts.map(part => part.toLowerCase() === query.toLowerCase() ? `<span class="highlight">${part}</span>` : part).join('');
+        li.addEventListener('click', () => {
+          searchBox.value = result.name;
+          searchResults.innerHTML = '';
+        });
+        searchResults.appendChild(li);
+      });
+    }
+  
+    // Event listener for input changes
+    searchBox.addEventListener('input', function() {
+      const query = this.value;
+      if (query.length === 0) {
+        searchResults.innerHTML = '';
+        detailsDiv.textContent = ''; // Clear details display for empty search
+        return;
+      }
+      const results = filterData(query);
+      displayResults(results, query);
+      detailsDiv.textContent = ''; // Clear details display for new search
+    });
+  
+    // Event listener to fetch details when button is clicked
+    fetchButton.addEventListener('click', function() {
+      const query = searchBox.value;
+      if (!query) {
+        alert("Please enter a search query.");
+        return;
+      }
+      const result = jsonData.find(item => item.name.toLowerCase() === query.toLowerCase());
+      if (result) {
+        detailsDiv.textContent = ` ${result.details}`;
+        
+      } else {
+        detailsDiv.textContent = "Details not found.";
+      }
+    });
+  });
+  
+</script>
+
+
+<style>
+
+    body {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      .header {
+        font-size: 36px;
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+      }
+      
+      .search-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      
+      #search-box {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+      }
+      
+      #fetch-details {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+      
+      #fetch-details:hover {
+        background-color: #0056b3;
+      }
+      
+      #search-results {
+        list-style: none;
+        padding: 0;
+      }
+      
+      #search-results li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+      }
+      
+      #search-results li:hover {
+        background-color: #f9f9f9;
+      }
+    
+      .highlight {
+        font-weight: bold;
+        background-color: yellow;
+      }
+      
+</style>
+</body>
+</html>
